@@ -41,11 +41,8 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       -
-        name: Set up Containerd
-        run: |
-          curl -L --output /tmp/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
-          sudo sh -c "tar -xvz -f /tmp/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz -C /usr/local/ && mkdir -p /etc/containerd/ && containerd config default > /etc/containerd/config.toml was && chmod +x /usr/local/bin/containerd* /usr/local/bin/ctr"
-          sudo containerd &> /tmp/containerd.log &
+        name: Set up containerd
+        uses: crazy-max/ghaction-setup-containerd@v1
       -
         name: Build
         uses: docker/build-push-action@v2
@@ -67,11 +64,6 @@ jobs:
         name: Push image with Containerd
         run: |
           sudo ctr --debug image push --user "${{ github.repository_owner }}:${{ secrets.CR_PAT }}" ${{ steps.prep.outputs.docker_image }}:${{ steps.prep.outputs.version }}
-      -
-        name: Output Containerd logs
-        if: always()
-        run: |
-          sudo cat /tmp/containerd.log
 
   github-ghcr-newrepo:
     runs-on: ubuntu-latest
@@ -91,11 +83,8 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       -
-        name: Set up Containerd
-        run: |
-          curl -L --output /tmp/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
-          sudo sh -c "tar -xvz -f /tmp/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz -C /usr/local/ && mkdir -p /etc/containerd/ && containerd config default > /etc/containerd/config.toml was && chmod +x /usr/local/bin/containerd* /usr/local/bin/ctr"
-          sudo containerd &> /tmp/containerd.log &
+        name: Set up containerd
+        uses: crazy-max/ghaction-setup-containerd@v1
       -
         name: Build
         uses: docker/build-push-action@v2
@@ -117,8 +106,3 @@ jobs:
         name: Push image with Containerd
         run: |
           sudo ctr --debug image push --user "${{ github.repository_owner }}:${{ secrets.CR_PAT }}" ${{ steps.prep.outputs.docker_image }}:edge
-      -
-        name: Output Containerd logs
-        if: always()
-        run: |
-          sudo cat /tmp/containerd.log
