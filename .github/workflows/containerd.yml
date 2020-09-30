@@ -63,4 +63,4 @@ jobs:
       -
         name: Push image with Containerd
         run: |
-          sudo ctr --debug image push --user "${{ github.repository_owner }}:${{ secrets.CR_PAT }}" ${{ steps.prep.outputs.docker_image }}:${{ steps.prep.outputs.version }}
+          #sudo ctr --debug image push --user "${{ github.repository_owner }}:${{ secrets.CR_PAT }}" ${{ steps.prep.outputs.docker_image }}:${{ steps.prep.outputs.version }}
