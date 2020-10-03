@@ -84,7 +84,6 @@ jobs:
 
   registry:
     runs-on: ubuntu-latest
-    needs: github-first-build
     steps:
       -
         name: Checkout
