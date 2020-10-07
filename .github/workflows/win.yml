@@ -1,6 +1,7 @@
 name: win
 
 on:
+  workflow_dispatch:
   push:
 
 jobs:
