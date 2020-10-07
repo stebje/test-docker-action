@@ -90,3 +90,7 @@ jobs:
         run: |
           docker pull ${{ steps.prep.outputs.docker_image }}:${{ steps.prep.outputs.version }}
           docker image inspect ${{ steps.prep.outputs.docker_image }}:${{ steps.prep.outputs.version }}
+      -
+        name: Dump context
+        if: always()
+        uses: crazy-max/ghaction-dump-context@v1
