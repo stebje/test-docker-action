@@ -30,8 +30,13 @@ jobs:
         with:
           script: |
             const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
-            const { data: repository } = await github.repos.get({owner, repo})
-            return repository
+            return await github.repos.get({owner, repo})
+      -
+        name: Dump repo meta
+        env:
+          REPO: ${{ toJson(steps.repo.outputs.result) }}
+        run: |
+          echo $REPO
       -
         name: Prepare
         id: prep
