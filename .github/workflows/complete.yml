@@ -29,13 +29,8 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            const res = await github.repos.get(context.repo)
-            console.log(res.data)
-            return res.data
-      -
-        name: Dump repo meta
-        run: |
-          echo ${{ steps.repo.outputs.result }}
+            const data = await github.repos.get(context.repo)
+            return data.data
       -
         name: Prepare
         id: prep
@@ -84,14 +79,14 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           labels: |
-            org.opencontainers.image.title=${{ steps.repo.outputs.result.name }}
-            org.opencontainers.image.description=${{ steps.repo.outputs.result.description }}
-            org.opencontainers.image.url=${{ steps.repo.outputs.result.html_url }}
-            org.opencontainers.image.source=${{ steps.repo.outputs.result.clone_url }}
+            org.opencontainers.image.title=${{ fromJson(steps.repo.outputs.result).name }}
+            org.opencontainers.image.description=${{ fromJson(steps.repo.outputs.result).description }}
+            org.opencontainers.image.url=${{ fromJson(steps.repo.outputs.result).html_url }}
+            org.opencontainers.image.source=${{ fromJson(steps.repo.outputs.result).clone_url }}
             org.opencontainers.image.version=${{ steps.prep.outputs.version }}
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.licenses=${{ steps.repo.outputs.result.license.spdx_id }}
+            org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
       -
         name: Check manifest
         if: github.event_name != 'pull_request'
