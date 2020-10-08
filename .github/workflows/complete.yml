@@ -29,10 +29,11 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            return github.repos.get({
+            const { data: repository } = await github.repos.get({
               context.repo.owner,
               context.repo.repo
             })
+            return repository
       -
         name: Prepare
         id: prep
