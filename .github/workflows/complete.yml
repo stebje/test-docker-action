@@ -29,8 +29,8 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
-            return await github.repos.get({owner, repo})
+            const data = await github.repos.get(context.repo)
+            return data.data && data.data["default_branch"] === context.ref.split('/').slice(-1)[0]
       -
         name: Dump repo meta
         run: |
