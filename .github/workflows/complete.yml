@@ -29,7 +29,8 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            return await github.repos.get(context.repo).data
+            const repo = await github.repos.get(context.repo)
+            return repo.data
       -
         name: Prepare
         id: prep
