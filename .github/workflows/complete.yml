@@ -33,10 +33,8 @@ jobs:
             return await github.repos.get({owner, repo})
       -
         name: Dump repo meta
-        env:
-          REPO: ${{ toJson(steps.repo.outputs.result) }}
         run: |
-          echo $REPO
+          echo ${{ steps.repo.outputs.result }}
       -
         name: Prepare
         id: prep
