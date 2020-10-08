@@ -24,6 +24,16 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
+        name: Repo meta
+        id: repo
+        uses: actions/github-script@v3
+        with:
+          script: |
+            return github.repos.get({
+              context.repo.owner,
+              context.repo.repo
+            })
+      -
         name: Prepare
         id: prep
         run: |
@@ -71,14 +81,14 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
           labels: |
-            org.opencontainers.image.title=${{ github.event.repository.name }}
-            org.opencontainers.image.description=${{ github.event.repository.description }}
-            org.opencontainers.image.url=${{ github.event.repository.html_url }}
-            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.title=${{ steps.repo.outputs.result.name }}
+            org.opencontainers.image.description=${{ steps.repo.outputs.result.description }}
+            org.opencontainers.image.url=${{ steps.repo.outputs.result.html_url }}
+            org.opencontainers.image.source=${{ steps.repo.outputs.result.clone_url }}
             org.opencontainers.image.version=${{ steps.prep.outputs.version }}
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+            org.opencontainers.image.licenses=${{ steps.repo.outputs.result.license.spdx_id }}
       -
         name: Check manifest
         if: github.event_name != 'pull_request'
