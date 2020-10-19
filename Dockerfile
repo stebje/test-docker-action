@@ -1,5 +1,7 @@
-FROM --platform=$BUILDPLATFORM golang:alpine AS build
+FROM golang:alpine as hello
+RUN echo 'hello!' > /tmp/hello.txt
 
+FROM hello as build
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 RUN echo "I'm running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
