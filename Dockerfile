@@ -12,3 +12,6 @@ COPY --from=build /log /log
 FROM alpine as copy
 COPY . .
 RUN ls -al
+
+FROM alpine as qemu
+RUN cat /proc/cpuinfo && uname -mp && uname -a && arch
