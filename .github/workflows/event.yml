@@ -24,6 +24,7 @@ jobs:
       -
         name: Event
         run: |
+          echo $GITHUB_EVENT_NAME
           cat $GITHUB_EVENT_PATH
       -
         name: Dump context
