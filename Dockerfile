@@ -1,5 +1,7 @@
+# syntax = docker/dockerfile:experimental
 FROM golang:alpine as hello
 RUN echo 'hello!' > /tmp/hello.txt
+RUN --mount=type=secret,id=MULTILINE,target=/tmp/secret cat /tmp/secret
 
 FROM hello as build
 ARG TARGETPLATFORM
